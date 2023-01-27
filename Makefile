@@ -30,16 +30,27 @@ $(NAME): $(OBJS) $(INCL)
 # удалить все объектные файлы
 clean:
 	rm -rf $(OBJS)
+	rm -rf *.txt
 
 # удаляет все объектные файлы и саму программу
 fclean: clean
 	rm -rf $(NAME)
+	rm -rf *.txt
 
 #все удалить и пересобрать
 re: fclean all
 
+valgrind: $(NAME)
+	valgrind --leak-check=full --tool=memcheck --log-
+file=log.txt ./cat s21_grep.c
+
+cppcheck: s21_grep.c
+	cppcheck --enable=all --std=c11 --inconclusive --
+suppress=missingIncludeSystem *.c
+
 test:
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re test valgrind cppcheck
 
 #http://www.opennet.ru/docs/RUS/make_compile/
+
